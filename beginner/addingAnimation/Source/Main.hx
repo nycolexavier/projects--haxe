@@ -26,7 +26,11 @@ class Main extends Sprite
 		 * Para ver nossa instância de Bitmap, usamos addChild para torná-la visível na lista de exibição. A “lista de exibição” é um método de desenho fácil de usar que está disponível no OpenFL.
 
 		 */
-		addChild (bitmap);
+
+		/**
+		 * addChild (bitmap);
+		 */
+		
 
 		/**
 	 	* Actuate tem um método de interpolação que aceita um objeto para animar, a duração da animação e, em terceiro lugar, um objeto com 		valores alvo para cada propriedade que você deseja alterar ao longo do tempo. Para animar a posição x da imagem para fazê-la se mover 		pela tela, por exemplo, poderíamos usar o seguinte:
@@ -72,12 +76,54 @@ class Main extends Sprite
 	 	* Por exemplo, se decidirmos dimensionar nossa imagem para fazê-la “saltar” e aparecer, poderíamos usar nossa animação anterior na escalaX e escalaY do objeto (em vez do valor x) 
 	 	*/
 
-		 bitmap.alpha = 0;
+		/**bitmap.alpha = 0;
 		 bitmap.scaleX = 0;
 		 bitmap.scaleY = 0;
 		 bitmap.smoothing = true;
 
 		 Actuate.tween (bitmap, 3, {alpha: 1});
 		 Actuate.tween (bitmap, 6, {scaleX: 1, scaleY: 1}).ease (Elastic.easeOut);
+		 **/
+
+		/**
+	 	* Os objetos de exibição OpenFL têm uma origem no canto superior esquerdo do objeto. Para a maioria das operações, como x, y, largura e altura, isso facilita o manuseio dos objetos. No entanto, às vezes você pode querer alterar o ponto de origem do objeto. Por exemplo, no código acima, definimos o objeto para animar a escala de 0 a 1. Isso irá dimensionar o objeto a partir do canto superior esquerdo, que pode não ser o efeito que desejamos. É simples alterar o ponto de origem de um objeto colocando-o dentro de um contêiner de objeto de exibição. A forma mais comum de contêiner de objeto de exibição é a classe Sprite, então, em vez de animar nossa imagem diretamente para o palco, podemos adicionar nossa imagem a um Sprite pai e animar o pai com algumas pequenas alterações:
+	 	*/
+
+		/**bitmap.x = - bitmap.width / 2;
+		bitmap.y = - bitmap.height / 2;
+		bitmap.smoothing = true;
+
+		var container = new Sprite ();
+		container.addChild (bitmap);
+		container.alpha = 0;
+		container.scaleX = 0;
+		container.scaleY = 0;
+
+		addChild (container);
+
+		Actuate.tween (container, 3, { alpha: 1});
+		Actuate.tween (container, 6, { scaleX: 1, scaleY: 1}).ease (Elastic.easeOut);
+		**/
+
+		/**
+	 	*  O último exemplo de código centralizou nossa imagem para melhorar o comportamento da animação em escala, mas a imagem está centralizada no canto superior esquerdo da janela, em vez de ser centralizada na janela. As seguintes alterações centralizarão a imagem com base no tamanho da largura e altura do palco atual e adicionam um pequeno atraso à animação
+	 	*/
+
+		bitmap.x = - bitmap.width / 2;
+		bitmap.y = - bitmap.height / 2;
+		bitmap.smoothing = true;
+
+		var container = new Sprite ();
+		container.addChild (bitmap);
+		container.alpha = 0;
+		container.scaleX = 0;
+		container.scaleY = 0;
+		container.x = stage.stageWidth / 2;
+		container.y = stage.stageHeight / 2;
+
+		addChild (container);
+
+		Actuate.tween (container, 3, { alpha: 1});
+		Actuate.tween (container, 6, {scaleX: 1, scaleY: 1}).delay (0.4).ease(Elastic.easeOut);
 	}
 }
